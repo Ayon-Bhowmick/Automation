@@ -1,15 +1,18 @@
-from requests import get
+from requests import get, post
 from sys import argv
+import os
 from json import loads
 from time import sleep
 from notifypy import Notify
 
-notification = Notify()
-LOCATIONS: dict[str, tuple[float, float]] = {"library": (40.60668, -75.38097),
+API_KEY: str = os.environ["PUSHOVER_API_KEY"]
+USER_KEY = os.environ["PUSHOVER_USER_KEY"]
+LOCATIONS: "dict[str, tuple[float, float]]" = {"library": (40.60668, -75.38097),
                                             "home": (40.60713, -75.37456)}
+notification = Notify()
 
 if __name__ == "main":
-    location: tuple[float, float] = LOCATIONS[argv[1]]
+    location: "tuple[float, float]" = LOCATIONS[argv[1]]
     while 1:
         r = get("https://lehigh.doublemap.com/map/v2/buses")
         data = loads(r.text)
@@ -18,6 +21,8 @@ if __name__ == "main":
             if bus[0] >= (location[0] - 0.001) and bus[0] <= (location[0] + 0.001):
                 if bus[1] >= (location[1] - 0.001) and bus[1] <= (location[1] + 0.001):
                     print("bus is close")
+                    payload = {"title": f"The bus is close to {argv[1]}", "message": "The bus is nearby", "user": USER_KEY, "token": API_KEY }
+                    post("https://api.pushover.net/1/messages.json", data=payload, headers={'User-Agent': 'Python'})
                     notification.title = f"The bus is close to {argv[1]}"
                     notification.message = f"The bus is nearby"
                     notification.send()
