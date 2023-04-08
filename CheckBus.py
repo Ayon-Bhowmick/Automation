@@ -5,11 +5,11 @@ from time import sleep
 from notifypy import Notify
 
 notification = Notify()
-locations = {"library": (40.60668, -75.38097),
+LOCATIONS: dict[str, tuple[float, float]] = {"library": (40.60668, -75.38097),
                                             "home": (40.60713, -75.37456)}
 
 if __name__ == "main":
-    location: tuple[float, float] = locations[argv[1]]
+    location: tuple[float, float] = LOCATIONS[argv[1]]
     while 1:
         r = get("https://lehigh.doublemap.com/map/v2/buses")
         data = loads(r.text)
