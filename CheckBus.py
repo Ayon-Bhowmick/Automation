@@ -5,10 +5,11 @@ from json import loads
 from time import sleep
 from notifypy import Notify
 
-API_KEY: str = os.environ["PUSHOVER_API_KEY"]
+API_KEY = os.environ["PUSHOVER_API_KEY"]
 USER_KEY = os.environ["PUSHOVER_USER_KEY"]
 LOCATIONS: "dict[str, tuple[float, float]]" = {"library": (40.60668, -75.38097),
                                             "home": (40.60713, -75.37456)}
+RADIUS = 0.001
 notification = Notify()
 
 if __name__ == "main":
@@ -18,8 +19,8 @@ if __name__ == "main":
         data = loads(r.text)
         cords = [(bus["lat"], bus["lon"]) for bus in data]
         for bus in cords:
-            if bus[0] >= (location[0] - 0.001) and bus[0] <= (location[0] + 0.001):
-                if bus[1] >= (location[1] - 0.001) and bus[1] <= (location[1] + 0.001):
+            if bus[0] >= (location[0] - RADIUS) and bus[0] <= (location[0] + RADIUS):
+                if bus[1] >= (location[1] - RADIUS) and bus[1] <= (location[1] + RADIUS):
                     print("bus is close")
                     payload = {"title": f"The bus is close to {argv[1]}", "message": "The bus is nearby", "user": USER_KEY, "token": API_KEY }
                     post("https://api.pushover.net/1/messages.json", data=payload, headers={'User-Agent': 'Python'})
