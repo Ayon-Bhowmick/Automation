@@ -10,9 +10,9 @@ USER_KEY = os.environ["PUSHOVER_USER_KEY"]
 LOCATIONS: "dict[str, tuple[float, float]]" = {"library": (40.60668, -75.38097),
                                                "home": (40.60713, -75.37456)}
 RADIUS = 0.001
-notification = Notify()
 
 if __name__ == "main":
+    notification = Notify()
     location: "tuple[float, float]" = LOCATIONS[argv[1]]
     while 1:
         r = get("https://lehigh.doublemap.com/map/v2/buses")
