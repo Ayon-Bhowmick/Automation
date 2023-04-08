@@ -8,7 +8,7 @@ from notifypy import Notify
 API_KEY = os.environ["PUSHOVER_API_KEY"]
 USER_KEY = os.environ["PUSHOVER_USER_KEY"]
 LOCATIONS: "dict[str, tuple[float, float]]" = {"library": (40.60668, -75.38097),
-                                            "home": (40.60713, -75.37456)}
+                                               "home": (40.60713, -75.37456)}
 RADIUS = 0.001
 notification = Notify()
 
